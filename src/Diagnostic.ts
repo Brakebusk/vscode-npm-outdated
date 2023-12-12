@@ -166,18 +166,7 @@ export const getPackageDiagnostic = async (
     // The user has the latest version defined in `package.json`,
     // but still needs to run `npm install` to complete.
     if (await packageInfo.requiresInstallCommand()) {
-      return new PackageRelatedDiagnostic(
-        packageInfo.versionRange,
-        l10n.t(
-          'Ready-to-install package "{0}" at version {1}. Just run your package manager install command.',
-          packageInfo.name,
-          versionLatest
-        ),
-        DiagnosticSeverity.Information,
-        document,
-        packageInfo,
-        DiagnosticType.READY_TO_INSTALL
-      )
+      return
     }
 
     return

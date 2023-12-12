@@ -1,5 +1,4 @@
 import { describe, expect, it, vi } from "vitest"
-import { DiagnosticSeverity } from "vscode"
 import { COMMAND_INSTALL, COMMAND_INSTALL_REQUEST } from "./Command.js"
 import { vscodeSimulator } from "./TestUtils.js"
 import { Icons } from "./Theme.js"
@@ -125,22 +124,6 @@ describe("package diagnostics", () => {
 
     expect(diagnostics).toHaveLength(0)
     expect(decorations).toStrictEqual([])
-  })
-
-  it("valid dependency, pending installation", async () => {
-    const { actions, decorations, diagnostics } = await vscodeSimulator({
-      packageJson: { dependencies: { "npm-outdated": "^1.0.0" } },
-      packagesRepository: { "npm-outdated": ["1.0.0"] },
-      selectFirsts: 1,
-    })
-
-    expect(diagnostics[0]?.message).toContain("run your package manager")
-    expect(diagnostics[0]?.severity).toBe(DiagnosticSeverity.Information)
-    expect(decorations[0]).toContain(
-      "Now run your package manager install command."
-    )
-    expect(actions[0]?.title).toBe("Install package")
-    expect(actions).toHaveLength(1)
   })
 
   it("valid dependency, already installed, just formalization", async () => {
@@ -353,21 +336,6 @@ describe("package diagnostics", () => {
     })
 
     expect(diagnostics).toHaveLength(0)
-  })
-
-  it("valid dependency, waiting for run your package manager install", async () => {
-    const { decorations, diagnostics } = await vscodeSimulator({
-      packageJson: { dependencies: { "npm-outdated": "^1.0.1" } },
-      packagesInstalled: { "npm-outdated": "1.0.0" },
-      packagesRepository: { "npm-outdated": ["1.0.0", "1.0.1"] },
-    })
-
-    expect(diagnostics[0]?.message).toBe(
-      'Ready-to-install package "npm-outdated" at version 1.0.1. Just run your package manager install command.'
-    )
-    expect(decorations[0]).toContain(
-      "Now run your package manager install command."
-    )
   })
 
   it("valid dependency, with major already installed must not show 'major' tooltip", async () => {

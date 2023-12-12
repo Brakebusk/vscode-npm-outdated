@@ -3,8 +3,8 @@
   "displayName": "npm Outdated",
   "description": "Displays a message in package.json files for packages with newer versions available.",
   "version": "0.0.0-semantically-released",
-  "publisher": "mskelton",
-  "author": "Mark Skelton",
+  "publisher": "brakebusk local development",
+  "author": "brakebusk local test",
   "l10n": "./locales",
   "repository": {
     "type": "git",
@@ -29,7 +29,8 @@
     "format:check": "prettier --check .",
     "format": "prettier --write .",
     "test": "vitest",
-    "test:watch": "pnpm test --watch"
+    "test:watch": "pnpm test --watch",
+    "package": "mkdirp dist && vsce package -o dist/outdated.vsix --yarn"
   },
   "icon": "assets/icon.png",
   "engines": {
