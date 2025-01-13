@@ -135,18 +135,19 @@ export const fetchLite = <T>(options: FetchLite): Promise<T | undefined> => {
     const thisReq = https.request(
       { headers, hostname, method: options.method ?? "get", path },
       (response: IncomingMessage) => {
-        const responseBuffers: Buffer[] = []
+        const responseBuffers: Uint8Array[] = []
 
-        response.on("data", (data: Buffer) => responseBuffers.push(data))
+        response.on("data", (data: Uint8Array) => responseBuffers.push(data))
         // istanbul ignore next
         response.on("error", () => resolve(undefined))
         response.on("end", () => {
+          const concatenatedResponse = Buffer.concat(responseBuffers)
           if (!response.headers["content-encoding"]) {
-            return resolve(JSON.parse(responseBuffers.toString()))
+            return resolve(JSON.parse(concatenatedResponse.toString()))
           }
 
           return zlib.gunzip(
-            Buffer.concat(responseBuffers),
+            new Uint8Array(concatenatedResponse),
             (_error, contents) => {
               resolve(JSON.parse(contents.toString()))
             }
